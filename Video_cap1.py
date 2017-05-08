@@ -109,6 +109,8 @@ while(True):
     #proportion of the new confidence value to include
     time_to_live = 10
     #how many frames may pass without a stored contour being found before we delete it
+    penalty = 2
+    #penalty for new contours
     
     #new[:9] contains the probabilities
     #new[10] is the position
@@ -125,13 +127,15 @@ while(True):
             if new[10][0] < old[10][0] +slack and new[10][0] > old[10][0] -slack and new[10][1] < old[10][1]+slack and new[10][1] > old[10][1] -slack:
                 #if it matches, update it
                 inserted = 1
-                old[:9] = [x * old_weight + y * new_weight for x,y in zip(old[:9], new[:9])]
+                old[:10] = [x * old_weight + y * new_weight for x,y in zip(old[:10], new[:10])]
                 old[10] = new[10]
                 old[11] = time_to_live
-                break #break so we don't update the time to live on multiple contours
+                break #break so we don't update the time to live on multiple contours 
         #otherwise, append it
         if inserted == 0:
-            persistence.append(new + [time_to_live])
+            #persistence.append(new + [time_to_live])
+            persistence.append([x - penalty for x in new[:10]]+ [new[10]] + [time_to_live])
+            print([x - penalty for x in new[:10]]+ [new[10]] + [time_to_live])
             print (new + [time_to_live])
     
     print (len(persistence))
@@ -143,10 +147,10 @@ while(True):
         #remove if time to live is 0
     
     for old in persistence:
-        for j in range(9):
+        for j in range(10):
             cv2.putText(frame, str(int(old[j]*100)), (old[10][0]-20,old[10][1]+10*j), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 0, 255), 1)
-        if max(old[:9])> 0:
-            cv2.putText(frame, str(int(old.index(max(old[:9])))), (old[10][0], old[10][1]),cv2.FONT_HERSHEY_TRIPLEX, 2, (0, 0, 255), 3)
+        if max(old[:10])> 0:
+            cv2.putText(frame, str(int(old.index(max(old[:10])))), (old[10][0], old[10][1]),cv2.FONT_HERSHEY_TRIPLEX, 2, (0, 0, 255), 3)
         #draw numbers on the image
     
     
