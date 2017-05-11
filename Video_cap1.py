@@ -9,7 +9,7 @@ clf = joblib.load("digits_cls.pkl")
 
 # Default camera has index 0 and externally(USB) connected cameras have
 # indexes ranging from 1 to 3
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(2)
 persistence = []
 
 _, testframe = cap.read()
@@ -24,7 +24,7 @@ cv2.createTrackbar('new_weight','frame',20,100,nothing)
 cv2.createTrackbar('time_to_live','frame',10,50,nothing)
 cv2.createTrackbar('new_penalty','frame',0,1000,nothing)
 cv2.createTrackbar('invis_penalty','frame',0,1000,nothing)
-cv2.createTrackbar('min_confidence','frame',0,1000,nothing)
+cv2.createTrackbar('min_confidence','frame',300,1000,nothing)
 
 
 while(True):
