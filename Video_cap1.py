@@ -9,8 +9,23 @@ clf = joblib.load("digits_cls.pkl")
 
 # Default camera has index 0 and externally(USB) connected cameras have
 # indexes ranging from 1 to 3
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 persistence = []
+
+_, testframe = cap.read()
+cv2.imshow('frame', testframe)
+
+def nothing(x):
+    pass
+
+cv2.createTrackbar('slack','frame',30,100,nothing)
+cv2.createTrackbar('old_weight','frame',80,100,nothing)
+cv2.createTrackbar('new_weight','frame',20,100,nothing)
+cv2.createTrackbar('time_to_live','frame',10,50,nothing)
+cv2.createTrackbar('new_penalty','frame',0,1000,nothing)
+cv2.createTrackbar('invis_penalty','frame',0,1000,nothing)
+cv2.createTrackbar('min_confidence','frame',0,1000,nothing)
+
 
 while(True):
 
@@ -115,12 +130,18 @@ while(True):
     #penalty if no new contour matches up with a stored one
     min_confidence = -2
     #confidence required to recognise a digit
-    
-    
-    #new[:9] contains the probabilities
+  
+    #new[:10] contains the probabilities
     #new[10] is the position
     #old[11] is the time to live
     
+    slack          = cv2.getTrackbarPos('slack','frame')        
+    old_weight     = cv2.getTrackbarPos('old_weight','frame')   /100
+    new_weight     = cv2.getTrackbarPos('new_weight','frame')   /100
+    time_to_live   = cv2.getTrackbarPos('time_to_live','frame') 
+    new_penalty    = cv2.getTrackbarPos('new_penalty','frame')  /100
+    invis_penalty  = cv2.getTrackbarPos('invis_penalty','frame')/100
+    min_confidence = cv2.getTrackbarPos('min_confidence','frame')/100 - 5
     
     for new in newpersistence:
         #go through each of hte contours captured this frame
@@ -148,7 +169,7 @@ while(True):
     for old in persistence:
         old[11] -= 1
         #decrement time to live
-        if old[11] < 10:
+        if old[11] < 9:
             old[:10] = [x - invis_penalty for x in old[:10]]
         
     persistence = [x for x in persistence if x[11] > 0]
@@ -164,7 +185,7 @@ while(True):
     
     
     # Display the resulting frame
-    cv2.imshow('frame', frame)
+    cv2.imshow('frame2', frame)
     cv2.imshow('Threshold', im_th)
     
     
