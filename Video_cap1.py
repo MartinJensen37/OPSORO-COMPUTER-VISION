@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 from sklearn.externals import joblib
 from skimage.feature import hog
+from time import sleep
 
 
 # Load the classifier
@@ -9,7 +10,7 @@ clf = joblib.load("digits_cls.pkl")
 
 # Default camera has index 0 and externally(USB) connected cameras have
 # indexes ranging from 1 to 3
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(0)
 persistence = []
 
 _, testframe = cap.read()
@@ -56,23 +57,82 @@ while(True):
    
 
     
-    im_th, contours0, hierarchy  = cv2.findContours(im_th, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    im_th, contours0, hierarchy  = cv2.findContours(im_th, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    
-
-    area = [cv2.contourArea(cnt) for cnt in contours0]
+   
+    # area = [cv2.contourArea(cnt) for cnt in contours0]
 
     # hull = [cv2.convexHull(cnt) for cnt in contours0]
 
     # Draw contours in the original image 'im' with contours0 as input
 
-    # cv2.drawContours(frame, contours0, -1, (0,0,255), 2, cv2.LINE_AA, hierarchy, abs(-1))
+    newpersistence = []
     
+    print(hierarchy)
+    for i in range(len(contours0)):
+        if hierarchy[0][i][3]==-1:
+            dims = cv2.boundingRect(contours0[i])
+            im = np.zeros((int(dims[3]), int(dims[2])), np.uint8)
+            if hierarchy[0][i][2]==-1:
+                cont = contours0[i] -[[dims[0], dims[1]]]
+                cv2.fillPoly(im, cont, (255))
+            else:
+                cont = contours0[i]-[[dims[0], dims[1]]] , contours0[hierarchy[0][i][2]]-[[dims[0], dims[1]]]
+                cv2.fillPoly(im, cont, (255))
+                
+            if i == 0:
+                cv2.imshow('im', im)
+            
+            
+            maxsize = max(dims[2], dims[3])
+            
+            im2 = cv2.copyMakeBorder(im ,maxsize - dims[3],maxsize - dims[3],maxsize - dims[2],maxsize - dims[2],cv2.BORDER_CONSTANT,value=[0])
+            im2 = cv2.resize(im2, (24, 24), cv2.INTER_AREA)
+            im2 = cv2.copyMakeBorder(im2, 2, 2, 2, 2, cv2.BORDER_CONSTANT,value=[0])
 
+            if i == 0:
+                cv2.imshow('im2', im2)
+            
+            
+            roi_hog_fd = hog(im2, orientations=9, pixels_per_cell=(14, 14), cells_per_block=(1, 1), visualise=False)
+            
+            
+            #nbr = clf.predict(np.array([roi_hog_fd], 'float64'))
+            #cv2.putText(frame, str(int(nbr[0])), (rect[0], rect[1]),cv2.FONT_HERSHEY_TRIPLEX, 2, (0, 0, 255), 3)
+            test = clf.decision_function(np.array([roi_hog_fd], 'float64'))
+            prob = test.tolist()[0]
+            prob.append(dims)
+            newpersistence.append(prob)
+            
+            
+    
+    #for cnt in contours0:
+    
+        #dims = cv2.boundingRect(cnt)
+        #roi = im_th[dims[0]:dims[0]+dims[2], dims[1]:dims[1]+dims[3]]
+        #cv2.drawContours(im, cnt, -1, (0,0,255), 2, cv2.LINE_AA, 0, abs(-1))
+        
+        #dims = cv2.boundingRect(cnt)
+        #im = np.zeros((int(dims[2] * 1.6), int(dims[3]*1.6),3), np.uint8)
+        #cv2.fillPoly(im, cnt-[[dims[0], dims[1]]], (255,0,255))
+        #cv2.imshow('im', im)
+        #print(cnt)
+        #sleep(5)
+    
+    
+    
+    #cv2.fillPoly(frame, contours0, (255,0,0))
+    
+    # print (len(contours0[0]))
+    """
     # Rectangular bounding box around each number/contour
     rects = [cv2.boundingRect(cnt) for cnt in contours0]
     
-    newpersistence = []
+    
+    
+    
+    
+    
     # Draw the bounding box around the numbers(Making it visual)
     for rect, i in zip(rects, range(0, len(rects))):
                    
@@ -83,9 +143,11 @@ while(True):
         roi = im_th[pt1:pt1+leng, pt2:pt2+leng]
             
         
-        moments = [cv2.moments(cnt) for cnt in contours0]
+        # moments = [cv2.moments(cnt) for cnt in contours0]
         
-        #Check if any regions were found
+           
+            
+        # Check if any regions were found
         if roi.any() and rect[3] < 200 and rect[3] > 30 and rect[2] < 250 and rect[2] > 5:
             # Draw rectangles
             cv2.rectangle(frame, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (0, 255, 0), 3)
@@ -111,7 +173,7 @@ while(True):
             
             
     #print (newpersistence)
-    
+    """
     
     ##############
     #Tracking And Decision
