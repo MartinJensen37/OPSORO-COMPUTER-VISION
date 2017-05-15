@@ -109,7 +109,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
             dims = (dims[:2]+ (int(dims[2]*stretch),) + dims[3:])
             
             
-            im1 = cv2.resize(im2, (dims[2], dims[3]), cv2.INTER_AREA)
+            im1 = cv2.resize(im1, (dims[2], dims[3]), cv2.INTER_AREA)
             maxsize = max(dims[2], dims[3])
             
             im2 = cv2.copyMakeBorder(im1 ,maxsize - dims[3],maxsize - dims[3],maxsize - dims[2],maxsize - dims[2],cv2.BORDER_CONSTANT,value=[0])
