@@ -43,15 +43,17 @@ cv2.createTrackbar('stretch','frame',50,100,nothing)
 """
 
 
-while(True):
+#while(True):
+for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
 
+    image = frame.array
     
     # Capture frame-by-frame
     #ret, frame = cap.read()
-    frame = cap.capture_continuous(im, format="bgr", use_video_port=True)[0]
+    #frame = cap.capture_continuous(im, format="bgr", use_video_port=True)[0]
   
     # Convert to grayscale and apply Gaussian filtering
-    im_gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
+    im_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     im_gray = cv2.GaussianBlur(im_gray, (5, 5), 0)
     
