@@ -84,7 +84,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
 
     # Draw contours in the original image 'im' with contours0 as input
     #stretch = cv2.getTrackbarPos('stretch','frame') /100+1
-    
+    stretch = 1.5
     
     
     
