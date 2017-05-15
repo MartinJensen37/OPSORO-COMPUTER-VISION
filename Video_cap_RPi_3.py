@@ -51,7 +51,7 @@ while(True):
     frame = cap.capture_continuous(im, format="bgr", use_video_port=True)
   
     # Convert to grayscale and apply Gaussian filtering
-    im_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    im_gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
 
     im_gray = cv2.GaussianBlur(im_gray, (5, 5), 0)
     
