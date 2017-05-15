@@ -293,6 +293,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
     
     
     # Save image to folder that connected to the OPSORO website
+    im_th = cv2.cvtColor(im_th, cv2.COLOR_GRAY2BGR)
     image = np.concatenate(image, im_th)
     cv2.imwrite("../OPSORO/OS/src/opsoro/apps/testapp/static/images/example.JPEG", image)
 
