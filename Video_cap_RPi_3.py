@@ -48,7 +48,7 @@ while(True):
     
     # Capture frame-by-frame
     #ret, frame = cap.read()
-    frame = cap.capture_continuous(im, format="bgr", use_video_port=True)
+    frame = cap.capture_continuous(im, format="bgr", use_video_port=True)[0]
   
     # Convert to grayscale and apply Gaussian filtering
     im_gray = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
