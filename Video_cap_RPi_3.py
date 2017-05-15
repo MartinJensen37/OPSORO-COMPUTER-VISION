@@ -262,9 +262,9 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
             #persistence.append(new + [time_to_live])
             persistence.append([x - new_penalty for x in new[:10]]+ [new[10]] + [time_to_live])
             #penalty for new contours
-            print([x - new_penalty for x in new[:10]]+ [new[10]] + [time_to_live])
+            #print([x - new_penalty for x in new[:10]]+ [new[10]] + [time_to_live])
             
-    print (len(persistence))
+    #print (len(persistence))
     
     for old in persistence:
         old[11] -= 1
