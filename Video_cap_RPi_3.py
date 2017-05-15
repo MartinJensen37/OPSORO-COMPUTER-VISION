@@ -94,25 +94,25 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
         dims = cv2.boundingRect(contours0[i])
         if hierarchy[0][i][3]==-1 and dims[3] < 150 and dims[3] > 30 and dims[2] < 200 and dims[2] > 5:
             
-            im = np.zeros((int(dims[3]), int(dims[2])), np.uint8)
+            im1 = np.zeros((int(dims[3]), int(dims[2])), np.uint8)
             
             cont = contours0[i] -[[dims[0], dims[1]]]
                 #cv2.fillPoly(im, cont, (255))
-            cv2.drawContours(im, contours0, i, (255), cv2.FILLED, cv2.LINE_AA, hierarchy, 1, (-dims[0], -dims[1]))
+            cv2.drawContours(im1, contours0, i, (255), cv2.FILLED, cv2.LINE_AA, hierarchy, 1, (-dims[0], -dims[1]))
 
                 
             #if i == 0:
-            #    cv2.imshow('im', im)
+            #    cv2.imshow('im', im1)
             
             #dims[2] =int(dims[2]*stretch)
             
             dims = (dims[:2]+ (int(dims[2]*stretch),) + dims[3:])
             
             
-            im = cv2.resize(im, (dims[2], dims[3]), cv2.INTER_AREA)
+            im1 = cv2.resize(im2, (dims[2], dims[3]), cv2.INTER_AREA)
             maxsize = max(dims[2], dims[3])
             
-            im2 = cv2.copyMakeBorder(im ,maxsize - dims[3],maxsize - dims[3],maxsize - dims[2],maxsize - dims[2],cv2.BORDER_CONSTANT,value=[0])
+            im2 = cv2.copyMakeBorder(im1 ,maxsize - dims[3],maxsize - dims[3],maxsize - dims[2],maxsize - dims[2],cv2.BORDER_CONSTANT,value=[0])
             
             im2 = cv2.dilate(im2, np.ones((maxsize//20,maxsize//20), np.uint8))
             
