@@ -276,8 +276,11 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
         #remove if time to live is 0
     
     for old in persistence:
-        for j in range(10):
-            cv2.putText(image, str(int(old[j]*100)), (old[10][0]-20,old[10][1]+10*j), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 0, 255), 1)
+        #print confidence
+        #for j in range(10):
+            #cv2.putText(image, str(int(old[j]*100)), (old[10][0]-20,old[10][1]+10*j), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 0, 255), 1)
+        
+        #print result if certain
         if max(old[:10])> min_confidence:
             cv2.putText(image, str(int(old.index(max(old[:10])))), (old[10][0], old[10][1]),cv2.FONT_HERSHEY_TRIPLEX, 2, (0, 0, 255), 3)
         #draw numbers on the image
