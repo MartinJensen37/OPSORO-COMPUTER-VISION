@@ -26,7 +26,7 @@ cv2.createTrackbar('time_to_live','frame',10,50,nothing)
 cv2.createTrackbar('new_penalty','frame',0,1000,nothing)
 cv2.createTrackbar('invis_penalty','frame',0,1000,nothing)
 cv2.createTrackbar('min_confidence','frame',300,1000,nothing)
-
+cv2.createTrackbar('stretch','frame',50,100,nothing)
 
 while(True):
 
@@ -65,13 +65,14 @@ while(True):
     # hull = [cv2.convexHull(cnt) for cnt in contours0]
 
     # Draw contours in the original image 'im' with contours0 as input
+    stretch = cv2.getTrackbarPos('stretch','frame') /100+1
 
     newpersistence = []
     
-    print(hierarchy)
     for i in range(len(contours0)):
-        if hierarchy[0][i][3]==-1:
-            dims = cv2.boundingRect(contours0[i])
+        dims = cv2.boundingRect(contours0[i])
+        if hierarchy[0][i][3]==-1 and dims[3] < 200 and dims[3] > 30 and dims[2] < 250 and dims[2] > 5:
+            
             im = np.zeros((int(dims[3]), int(dims[2])), np.uint8)
             
             cont = contours0[i] -[[dims[0], dims[1]]]
@@ -82,13 +83,25 @@ while(True):
             if i == 0:
                 cv2.imshow('im', im)
             
+            #dims[2] =int(dims[2]*stretch)
             
-            maxsize = max(dims[2], dims[3])
+            dims = (dims[:2]+ (int(dims[2]*stretch),) + dims[3:])
+            
+            
+            im = cv2.resize(im, (dims[2], dims[3]), cv2.INTER_AREA)
+            maxsize = max(int(dims[2]), dims[3])
             
             im2 = cv2.copyMakeBorder(im ,maxsize - dims[3],maxsize - dims[3],maxsize - dims[2],maxsize - dims[2],cv2.BORDER_CONSTANT,value=[0])
+            
+            im2 = cv2.dilate(im2, np.ones((maxsize//20,maxsize//20), np.uint8))
+            
+            #im2 = cv2.GaussianBlur(im2, (5, 5), 0)
+            
             im2 = cv2.resize(im2, (24, 24), cv2.INTER_AREA)
             im2 = cv2.copyMakeBorder(im2, 2, 2, 2, 2, cv2.BORDER_CONSTANT,value=[0])
-
+            
+            im2 = cv2.GaussianBlur(im2, (3, 3), 0)
+            
             if i == 0:
                 cv2.imshow('im2', im2)
             
