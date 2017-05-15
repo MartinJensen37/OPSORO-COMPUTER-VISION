@@ -225,7 +225,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
     #penalty for new contours
     invis_penalty = 0.2
     #penalty if no new contour matches up with a stored one
-    min_confidence = -2
+    min_confidence = -2.5
     #confidence required to recognise a digit
   
     #new[:10] contains the probabilities
