@@ -92,7 +92,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
     
     for i in range(len(contours0)):
         dims = cv2.boundingRect(contours0[i])
-        if hierarchy[0][i][3]==-1 and dims[3] < 150 and dims[3] > 30 and dims[2] < 200 and dims[2] > 5:
+        if hierarchy[0][i][3]==-1 and dims[3] < 90 and dims[3] > 30 and dims[2] < 150 and dims[2] > 5:
             
             im1 = np.zeros((int(dims[3]), int(dims[2])), np.uint8)
             
