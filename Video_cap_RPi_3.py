@@ -219,7 +219,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
     #proportion of the old confidence value to reuse
     new_weight = 0.2
     #proportion of the new confidence value to include
-    time_to_live = 10
+    time_to_live = 5
     #how many frames may pass without a stored contour being found before we delete it
     new_penalty = 2
     #penalty for new contours
