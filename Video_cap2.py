@@ -36,7 +36,7 @@ while(True):
   
     # Convert to grayscale and apply Gaussian filtering
     im_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
+    # slight blur to remove noise
     im_gray = cv2.GaussianBlur(im_gray, (5, 5), 0)
     
     
@@ -46,17 +46,17 @@ while(True):
     im_th = cv2.adaptiveThreshold(im_gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
 
     im_th = cv2.medianBlur(im_th, 7)
+    # remove salt and pepper noise after thresholding
     
-    # Find contours in the binary image 'im_th'
-
+    
+    # morphology is used to remove small holes and specks
     im_th = cv2.dilate(im_th, np.ones((3,3), np.uint8))
     im_th = cv2.erode(im_th, np.ones((3,3), np.uint8))
-
     im_th = cv2.morphologyEx(im_th, cv2.MORPH_ELLIPSE, (7,7))
     im_th = cv2.morphologyEx(im_th, cv2.MORPH_CLOSE, np.ones((3,3), np.uint8))
    
 
-    
+    # Find contours in the binary image 'im_th'
     im_th, contours0, hierarchy  = cv2.findContours(im_th, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
    
@@ -65,53 +65,75 @@ while(True):
     # hull = [cv2.convexHull(cnt) for cnt in contours0]
 
     # Draw contours in the original image 'im' with contours0 as input
+    # cv2.drawContours(im_th, contours0, -1, (0,0,255), 2, cv2.LINE_AA, hierarchy, abs(-1))
+    
+    # information about how much to stretch the picture before resizing it
+    # Done to make the numbers resemble the training data more
     stretch = cv2.getTrackbarPos('stretch','frame') /100+1
 
     newpersistence = []
     
     for i in range(len(contours0)):
         dims = cv2.boundingRect(contours0[i])
+        # if the contour is not within another contour AND is within a certain size range 
         if hierarchy[0][i][3]==-1 and dims[3] < 200 and dims[3] > 30 and dims[2] < 250 and dims[2] > 5:
             
+            # create an empty image of the same size as the contour
             im = np.zeros((int(dims[3]), int(dims[2])), np.uint8)
-            
-            cont = contours0[i] -[[dims[0], dims[1]]]
-                #cv2.fillPoly(im, cont, (255))
+               
+            # on the empty image "im" draw the contour from "contours0" denoted by "i", in white (255), 
+            # Filled in, using an antialiased line, and also draw the contous that we know to be inside it
+            # from hierachy, but only on the 1st level. Also move the origin to 0,0 by adding -dims[0], -dims[1]
             cv2.drawContours(im, contours0, i, (255), cv2.FILLED, cv2.LINE_AA, hierarchy, 1, (-dims[0], -dims[1]))
 
-                
+            #show the 0th contour in original size    
             if i == 0:
                 cv2.imshow('im', im)
             
             #dims[2] =int(dims[2]*stretch)
             
+            
+            # information about how much to stretch the picture before resizing it
+            # Done to make the numbers resemble the training data more
             dims = (dims[:2]+ (int(dims[2]*stretch),) + dims[3:])
             
-            
+            # stretch it
             im = cv2.resize(im, (dims[2], dims[3]), cv2.INTER_AREA)
+            
+            # calculate the longest side
             maxsize = max(int(dims[2]), dims[3])
             
+            # square the picture
             im2 = cv2.copyMakeBorder(im ,maxsize - dims[3],maxsize - dims[3],maxsize - dims[2],maxsize - dims[2],cv2.BORDER_CONSTANT,value=[0])
             
+            # Dilate the image so the contour will still show up after resizing
             im2 = cv2.dilate(im2, np.ones((maxsize//20,maxsize//20), np.uint8))
             
             #im2 = cv2.GaussianBlur(im2, (5, 5), 0)
             
+            # resize to 24,24, and add a black border
             im2 = cv2.resize(im2, (24, 24), cv2.INTER_AREA)
             im2 = cv2.copyMakeBorder(im2, 2, 2, 2, 2, cv2.BORDER_CONSTANT,value=[0])
             
+            # blur it a little to look more like the training data
             im2 = cv2.GaussianBlur(im2, (3, 3), 0)
             
+            
+            #show the 0th contour resized to 28,28
             if i == 0:
                 cv2.imshow('im2', im2)
             
-            
+            # calculate a histogram of oriented gradients
             roi_hog_fd = hog(im2, orientations=9, pixels_per_cell=(14, 14), cells_per_block=(1, 1), visualise=False)
             
             
             #nbr = clf.predict(np.array([roi_hog_fd], 'float64'))
             #cv2.putText(frame, str(int(nbr[0])), (rect[0], rect[1]),cv2.FONT_HERSHEY_TRIPLEX, 2, (0, 0, 255), 3)
+            
+            # Get confidence  values from the Support Vector Machine
             test = clf.decision_function(np.array([roi_hog_fd], 'float64'))
+            
+            # Make the result into a list, and append the location data, then append it to the list of contours
             prob = test.tolist()[0]
             prob.append(dims)
             newpersistence.append(prob)
