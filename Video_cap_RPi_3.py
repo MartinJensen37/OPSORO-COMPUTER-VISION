@@ -312,6 +312,6 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
 
 
 # When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
+#cap.release()
+#cv2.destroyAllWindows()
 print (noofframes)
