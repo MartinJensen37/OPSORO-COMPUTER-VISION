@@ -48,7 +48,7 @@ endtime = time.time()+60
 
 #while(True):
 for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
-    noofframes =+ 1
+    noofframes += 1
     if endtime <= time.time():
         break
     
