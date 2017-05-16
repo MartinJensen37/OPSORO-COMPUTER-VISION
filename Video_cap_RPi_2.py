@@ -5,6 +5,9 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 from skimage.feature import hog
 import math
+
+import time
+
 # Load the classifier
 clf = joblib.load("digits_cls.pkl")
 
@@ -14,8 +17,14 @@ cap.resolution = (640, 480)
 cap.framerate = 32
 im = PiRGBArray(cap, size=(640, 480))
 
-for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
+noofframes = 0
+endtime = time.time()+60
 
+for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
+    
+    noofframes += 1
+    if endtime <= time.time():
+        break
     image = frame.array
   
     # Convert to grayscale and apply Gaussian filtering
@@ -101,6 +110,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
 
 
 # When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
+#cap.release()
+#cv2.destroyAllWindows()
     
+print (noofframes)
