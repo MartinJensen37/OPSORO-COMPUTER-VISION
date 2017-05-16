@@ -3,6 +3,7 @@ import cv2
 from sklearn.externals import joblib
 from skimage.feature import hog
 from time import sleep
+import time
 
 from picamera.array import PiRGBArray
 from picamera import PiCamera
@@ -41,11 +42,18 @@ cv2.createTrackbar('invis_penalty','frame',0,1000,nothing)
 cv2.createTrackbar('min_confidence','frame',300,1000,nothing)
 cv2.createTrackbar('stretch','frame',50,100,nothing)
 """
+noofframes = 0
+endtime = time.time()+60
 
 
 #while(True):
 for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
-
+    noofframes =+ 1
+    if endtime =< time.time():
+        break
+    
+    
+    
     image = frame.array
     
     # Capture frame-by-frame
@@ -306,3 +314,4 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
+print (noofframes)
