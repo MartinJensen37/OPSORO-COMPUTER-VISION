@@ -1,24 +1,36 @@
+#Video cap without decision function for the RPi.
 import numpy as np
 import cv2
 from sklearn.externals import joblib
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 from skimage.feature import hog
+import math
 
+import time
 
 # Load the classifier
 clf = joblib.load("digits_cls.pkl")
 
-# Default camera has index 0 and externally(USB) connected cameras have
-# indexes ranging from 1 to 3
-cap = cv2.VideoCapture(0)
+# Defining the camera parameters: frame rate and resolution
+cap = PiCamera()
+cap.resolution = (640, 480)
+cap.framerate = 32
+im = PiRGBArray(cap, size=(640, 480))
 
-while(True):
+noofframes = 0
+endtime = time.time()+60
 
+for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
     
-    # Capture frame-by-frame
-    ret, frame = cap.read()
+    noofframes += 1
+    if endtime <= time.time():
+        break
+        pass
+    image = frame.array
   
     # Convert to grayscale and apply Gaussian filtering
-    im_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    im_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     im_gray = cv2.GaussianBlur(im_gray, (5, 5), 0)
     
@@ -50,7 +62,7 @@ while(True):
 
     # Draw contours in the original image 'im' with contours0 as input
 
-    cv2.drawContours(im_th, contours0, -1, (0,0,255), 2, cv2.LINE_AA, hierarchy, abs(-1))
+    # cv2.drawContours(frame, contours0, -1, (0,0,255), 2, cv2.LINE_AA, hierarchy, abs(-1))
     
 
     # Rectangular bounding box around each number/contour
@@ -73,7 +85,7 @@ while(True):
      #Check if any regions were found
      if roi.any() and rect[3] < 200 and rect[3] > 30 and rect[2] < 250 and rect[2] > 5:
         # Draw rectangles
-        cv2.rectangle(frame, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (0, 255, 0), 3)
+        cv2.rectangle(image, (rect[0], rect[1]), (rect[0] + rect[2], rect[1] + rect[3]), (0, 255, 0), 3)
         # Resize the image
         roi = cv2.resize(roi, (28, 28), im_th, interpolation=cv2.INTER_AREA)
         roi = cv2.dilate(roi, (3, 3))
@@ -81,16 +93,18 @@ while(True):
         # Calculate the HOG features
         roi_hog_fd = hog(roi, orientations=9, pixels_per_cell=(14, 14), cells_per_block=(1, 1), visualise=False)
         nbr = clf.predict(np.array([roi_hog_fd], 'float64'))
-        cv2.putText(frame, str(int(nbr[0])), (rect[0], rect[1]),cv2.FONT_HERSHEY_TRIPLEX, 2, (0, 0, 255), 3)
+        cv2.putText(image, str(int(nbr[0])), (rect[0], rect[1]),cv2.FONT_HERSHEY_TRIPLEX, 2, (0, 0, 255), 3)
         
         
    
 
     # Display the resulting frame
-    cv2.imshow('frame', frame)
-    cv2.imshow('Threshold', im_th)
+    # cv2.imshow('frame', image)
+    # cv2.imshow('Threshold', im_th)
+    # Save image to folder that connected to the OPSORO website
+    cv2.imwrite("../OPSORO/OS/src/opsoro/apps/testapp/static/images/example.JPEG", image)
 
-
+    im.truncate(0)
 
     # Press 'q' to exit the video stream
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -98,6 +112,7 @@ while(True):
 
 
 # When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
+#cap.release()
+#cv2.destroyAllWindows()
     
+print (noofframes)

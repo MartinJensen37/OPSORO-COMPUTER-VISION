@@ -1,3 +1,4 @@
+#VideoCap with decision function and contours for PC.
 import numpy as np
 import cv2
 from sklearn.externals import joblib

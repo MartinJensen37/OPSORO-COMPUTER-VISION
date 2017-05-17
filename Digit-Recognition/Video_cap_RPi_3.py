@@ -1,3 +1,4 @@
+#Videocap for RPi including decision function and contour stuff.
 import numpy as np
 import cv2
 from sklearn.externals import joblib
