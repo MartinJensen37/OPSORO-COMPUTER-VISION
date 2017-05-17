@@ -252,7 +252,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
     
     
     for new in newpersistence:
-        #go through each of hte contours captured this frame
+        #go through each of the contours captured this frame
         inserted = 0
         for old in persistence:
             #see if they match up with any of the existing conturs
@@ -277,7 +277,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
     for old in persistence:
         old[11] -= 1
         #decrement time to live
-        if old[11] < 9:
+        if old[11] < time_to_live - 1:
             old[:10] = [x - invis_penalty for x in old[:10]]
         
     persistence = [x for x in persistence if x[11] > 0]
@@ -290,7 +290,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
         
         #print result if certain
         if max(old[:10])> min_confidence:
-            cv2.putText(image, str(int(old.index(max(old[:10])))), (old[10][0], old[10][1]),cv2.FONT_HERSHEY_TRIPLEX, 2, (0, 0, 255), 3)
+            cv2.putText(image, str(int(old.index(max(old[:10])))), (old[10][0], old[10][1]), cv2.FONT_HERSHEY_TRIPLEX, 2, (0, 0, 255), 3)
         #draw numbers on the image
     
     

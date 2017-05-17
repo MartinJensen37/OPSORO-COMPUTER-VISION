@@ -265,7 +265,7 @@ while(True):
     for old in persistence:
         old[11] -= 1
         #decrement time to live
-        if old[11] < 9:
+        if old[11] < time_to_live - 1:
             old[:10] = [x - invis_penalty for x in old[:10]]
         
     persistence = [x for x in persistence if x[11] > 0]
