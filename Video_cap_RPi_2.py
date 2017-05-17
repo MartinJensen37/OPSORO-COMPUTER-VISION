@@ -1,4 +1,4 @@
-#Video cap without decision function. 
+#Video cap without decision function for the RPi.
 import numpy as np
 import cv2
 from sklearn.externals import joblib
