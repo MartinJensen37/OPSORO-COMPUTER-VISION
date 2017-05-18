@@ -28,9 +28,9 @@ im = PiRGBArray(cap, size=(640, 480))
 def nothing(x):
     pass
 
-cap.capture(frame, format="bgr", use_video_port=True)
+cap.capture(im, format="bgr", use_video_port=True)
 sleep(0.1)
-cap.capture(frame, format="bgr", use_video_port=True)
+_, frame = cap.capture(im, format="bgr", use_video_port=True)
 
     
 #for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
