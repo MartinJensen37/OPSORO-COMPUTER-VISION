@@ -9,6 +9,11 @@ import time
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import math
+import sys
+
+if len(sys.argv) != 2:
+    print("Wrong")
+    sys.exit(2)
 
 # Load the classifier
 #clf = joblib.load("digits_cls.pkl")
@@ -145,8 +150,11 @@ cv2.imwrite("../../OPSORO/OS/src/opsoro/apps/testapp/static/images/example.JPEG"
 result = newpersistence[0]
 for digits in newpersistence[1:]:
     result = np.concatenate((result, digits))
-    
-    
 cv2.imwrite("../../OPSORO/OS/src/opsoro/apps/testapp/static/images/data.JPEG", result)
+
+result.resize((28*28, -1))
+np.save(argv[1], result)
+
+
+    
 im.truncate(0)
-print("test")
