@@ -30,8 +30,9 @@ def nothing(x):
 
 cap.capture(im, format="bgr", use_video_port=True)
 sleep(0.1)
+print("test")
 _, frame = cap.capture(im, format="bgr", use_video_port=True)
-
+print("test")
     
 #for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
 image = frame.array
