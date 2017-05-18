@@ -153,7 +153,7 @@ for digits in newpersistence[1:]:
 cv2.imwrite("../../OPSORO/OS/src/opsoro/apps/testapp/static/images/data.JPEG", result)
 
 result.reshape((28*28, -1))
-np.save(sys.argv[1], result)
+np.save("training_data/" + sys.argv[1], result)
 
 
     
