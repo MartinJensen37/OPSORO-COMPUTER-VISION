@@ -149,3 +149,4 @@ for digits in newpersistence[1:]:
     
 cv2.imwrite("../OPSORO/OS/src/opsoro/apps/testapp/static/images/data.JPEG", result)
 im.truncate(0)
+print("test")
