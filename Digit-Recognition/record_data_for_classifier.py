@@ -152,7 +152,7 @@ for digits in newpersistence[1:]:
     result = np.concatenate((result, digits))
 cv2.imwrite("../../OPSORO/OS/src/opsoro/apps/testapp/static/images/data.JPEG", result)
 
-result.resize((28*28, -1))
+result.reshape((28*28, -1))
 np.save(argv[1], result)
 
 
