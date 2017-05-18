@@ -27,16 +27,18 @@ im = PiRGBArray(cap, size=(640, 480))
 
 def nothing(x):
     pass
-
+"""
 cap.capture(im, format="bgr", use_video_port=True)
 sleep(0.1)
 print("test")
 _, frame = cap.capture(im, format="bgr", use_video_port=True)
 print("test")
-    
-#for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
-image = frame.array
+   """
 
+image = []
+for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
+    image = frame.array
+    break
 # Capture frame-by-frame
 #ret, frame = cap.read()
 #frame = cap.capture_continuous(im, format="bgr", use_video_port=True)[0]
