@@ -141,12 +141,12 @@ for i in range(len(contours0)):
         
         
         
-cv2.imwrite("../OPSORO/OS/src/opsoro/apps/testapp/static/images/example.JPEG", image)
+cv2.imwrite("../../OPSORO/OS/src/opsoro/apps/testapp/static/images/example.JPEG", image)
 result = newpersistence[0]
 for digits in newpersistence[1:]:
     result = np.concatenate((result, digits))
     
     
-cv2.imwrite("../OPSORO/OS/src/opsoro/apps/testapp/static/images/data.JPEG", result)
+cv2.imwrite("../../OPSORO/OS/src/opsoro/apps/testapp/static/images/data.JPEG", result)
 im.truncate(0)
 print("test")
