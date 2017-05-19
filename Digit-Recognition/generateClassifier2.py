@@ -9,7 +9,7 @@ import sys
 
 
 datasets = np.empty(shape = (0, 28), dtype = 'int16')#datasets = np.array([])#np.load('./training_data/' + sys.stdin[0][0])
-labels = np.array([])#np.zeros(dataset.size // (28*28), 'int') + int(sys.stdin[0][0])
+labels = np.array([], 'int')#np.zeros(dataset.size // (28*28), 'int') + int(sys.stdin[0][0])
 
 
 
@@ -22,8 +22,7 @@ for line in sys.stdin:
 	datasets = np.concatenate((datasets, dataset))
 	labels = np.concatenate((labels, label))
 
-
-print(labels)
+print(line)
 
 features = dataset.reshape((-1, 28*28))
 
