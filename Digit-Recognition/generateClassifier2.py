@@ -21,8 +21,7 @@ for line in sys.stdin:
 
 	datasets = np.concatenate((datasets, dataset))
 	labels = np.concatenate((labels, label))
-
-print(line)
+	print(line)
 
 features = dataset.reshape((-1, 28*28))
 
