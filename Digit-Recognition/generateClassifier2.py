@@ -8,12 +8,12 @@ from collections import Counter
 import sys
 
 
-np.load('./training_data/' + sys.stdin[0][0])
-np.zeros(dataset.size // (28*28), 'int') + int(sys.stdin[0][0])
+ datasets = np.empty(shape = (28, 0), dtype = 'int16')#datasets = np.array([])#np.load('./training_data/' + sys.stdin[0][0])
+labels = np.array([])#np.zeros(dataset.size // (28*28), 'int') + int(sys.stdin[0][0])
 
 
 
-for line in sys.stdin[:1]:
+for line in sys.stdin:
 
 
 	dataset = np.load('./training_data/' + line.strip())
