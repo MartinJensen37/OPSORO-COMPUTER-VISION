@@ -11,7 +11,7 @@ from picamera import PiCamera
 import math
 
 # Load the classifier
-clf = joblib.load("digits_cls.pkl")
+clf = joblib.load("digits_cls1.pkl")
 
 # Default camera has index 0 and externally(USB) connected cameras have
 # indexes ranging from 1 to 3
