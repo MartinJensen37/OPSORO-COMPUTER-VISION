@@ -23,7 +23,7 @@ for line in sys.stdin:
 	labels = np.concatenate((labels, label))
 	print(line)
 
-features = dataset.reshape((-1, 28*28))
+features = datasets.reshape((-1, 28*28))
 
 # Extract the features and labels
 # features = np.array(dataset.data, 'int16') 
