@@ -53,7 +53,7 @@ while(True):
     # morphology is used to remove small holes and specks
     im_th = cv2.dilate(im_th, np.ones((3,3), np.uint8))
     im_th = cv2.erode(im_th, np.ones((3,3), np.uint8))
-    im_th = cv2.morphologyEx(im_th, cv2.MORPH_ELLIPSE, (7,7))
+    im_th = cv2.morphologyEx(im_th, cv2.MORPH_OPEN, (7,7))
     im_th = cv2.morphologyEx(im_th, cv2.MORPH_CLOSE, np.ones((3,3), np.uint8))
    
 
