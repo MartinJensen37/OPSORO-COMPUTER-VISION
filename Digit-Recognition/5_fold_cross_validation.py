@@ -6,12 +6,13 @@ import numpy as np
 from collections import Counter
 
 confusion = np.zeros((10,10))
+num_of_sheets = 5
 
-for testnum in range(5):
+for testnum in range(num_of_sheets):
     datasets = np.empty(shape = (0, 28), dtype = 'int16')
     labels = np.array([], 'int')
     for digit in range(10):
-        for sheetnum in range(10):
+        for sheetnum in range(num_of_sheets):
             if sheetnum != testnum:
                 dataset = np.load('./training_data/' + str(digit) + '_' + str(sheetnum) + '.npy')
                 label = np.zeros(dataset.size // (28*28), 'int') + digit
