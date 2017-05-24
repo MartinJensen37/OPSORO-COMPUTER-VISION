@@ -38,7 +38,7 @@ while(True):
     # Convert to grayscale and apply Gaussian filtering
     im_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     # slight blur to remove noise
-    im_gray = cv2.GaussianBlur(im_gray, (5, 5), 0)
+    im_gray = cv2.GaussianBlur(im_gray, (5, 5), 0)      ##why gaussian and not median?
     
     
     # Threshold the image
@@ -52,7 +52,7 @@ while(True):
     
     # morphology is used to remove small holes and specks
     im_th = cv2.dilate(im_th, np.ones((3,3), np.uint8))
-    im_th = cv2.erode(im_th, np.ones((3,3), np.uint8))
+    im_th = cv2.erode(im_th, np.ones((3,3), np.uint8))          ##why not another close?
     im_th = cv2.morphologyEx(im_th, cv2.MORPH_ELLIPSE, (7,7))
     im_th = cv2.morphologyEx(im_th, cv2.MORPH_CLOSE, np.ones((3,3), np.uint8))
    
