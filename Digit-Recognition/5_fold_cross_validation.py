@@ -13,7 +13,7 @@ for testnum in range(5):
     for digit in range(10):
         for sheetnum in range(10):
             if sheetnum != testnum:
-                dataset = np.load('./training_data/' + str(digit) + '_' + str(sheetnum))
+                dataset = np.load('./training_data/' + str(digit) + '_' + str(sheetnum) + '.npy')
                 label = np.zeros(dataset.size // (28*28), 'int') + digit
                 datasets = np.concatenate((datasets, dataset))
                 labels = np.concatenate((labels, label))
@@ -32,7 +32,7 @@ for testnum in range(5):
     clf.fit(hog_features, labels)
     
     for digit in range(10):
-        dataset = np.load('./training_data2/' + str(digit) + '_' + str(testnum))
+        dataset = np.load('./training_data2/' + str(digit) + '_' + str(testnum) + '.npy')
         features = dataset.reshape((-1, 28*28))
         for feature in features:
             roi_hog_fd = hog(feature.reshape((28, 28)), orientations=9, pixels_per_cell=(14, 14), cells_per_block=(1, 1), visualise=False)
