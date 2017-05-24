@@ -10,7 +10,7 @@ confusion = np.zeros((10,10))
 for testnum in range(5):
     datasets = np.empty(shape = (0, 28), dtype = 'int16')
     labels = np.array([], 'int')
-	for digit in range(10):
+    for digit in range(10):
 		for sheetnum in range(10):
 			if sheetnum != testenum:
 				dataset = np.load('./training_data/' + str(digit) + '_' + str(sheetnum))
