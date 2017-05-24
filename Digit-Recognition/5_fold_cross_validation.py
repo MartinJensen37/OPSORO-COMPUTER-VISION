@@ -12,7 +12,7 @@ for testnum in range(5):
     labels = np.array([], 'int')
     for digit in range(10):
         for sheetnum in range(10):
-            if sheetnum != testenum:
+            if sheetnum != testnum:
                 dataset = np.load('./training_data/' + str(digit) + '_' + str(sheetnum))
                 label = np.zeros(dataset.size // (28*28), 'int') + digit
                 datasets = np.concatenate((datasets, dataset))
