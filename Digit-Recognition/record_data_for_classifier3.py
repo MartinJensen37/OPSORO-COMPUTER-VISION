@@ -1,4 +1,4 @@
-
+#Videocap for RPi including decision function and contour stuff.
 import numpy as np
 import cv2
 from sklearn.externals import joblib
@@ -157,7 +157,7 @@ result.reshape((28*28, -1))
 
 a = input('OK? y/n')
 if a == 'y' or a == 'Y':
-    np.save("training_data/" + sys.argv[1], result)
+    np.save("training_data2/" + sys.argv[1], result)
 
 
     

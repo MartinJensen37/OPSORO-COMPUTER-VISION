@@ -11,7 +11,7 @@ from picamera import PiCamera
 import math
 
 # Load the classifier
-clf = joblib.load("digits_cls.pkl")
+clf = joblib.load("digits_cls1.pkl")
 
 # Default camera has index 0 and externally(USB) connected cameras have
 # indexes ranging from 1 to 3
@@ -51,7 +51,8 @@ endtime = time.time()+60
 for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
     noofframes += 1
     if endtime <= time.time():
-        break
+        pass
+        #break
     
     
     
@@ -302,7 +303,7 @@ for frame in cap.capture_continuous(im, format="bgr", use_video_port=True):
     
     
     # Save image to folder that connected to the OPSORO website
-    cv2.imwrite("../OPSORO/OS/src/opsoro/apps/testapp/static/images/example.JPEG", image)
+    cv2.imwrite("../../OPSORO/OS/src/opsoro/apps/testapp/static/images/example.JPEG", image)
 
     im.truncate(0)
 

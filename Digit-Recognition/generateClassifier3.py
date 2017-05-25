@@ -16,7 +16,7 @@ labels = np.array([], 'int')#np.zeros(dataset.size // (28*28), 'int') + int(sys.
 for line in sys.stdin:
 
 
-	dataset = np.load('./training_data/' + line.strip())
+	dataset = np.load('./training_data2/' + line.strip())
 	label = np.zeros(dataset.size // (28*28), 'int') + int(line[0])
 
 	datasets = np.concatenate((datasets, dataset))
